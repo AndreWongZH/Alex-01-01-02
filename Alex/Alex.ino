@@ -381,7 +381,6 @@ int pwmVal(float speed)
 // continue moving forward indefinitely.
 void forward(float dist, float speed)
 {
-
   dir = FORWARD;
   int val = pwmVal(speed);
 
