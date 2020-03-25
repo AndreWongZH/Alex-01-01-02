@@ -36,10 +36,10 @@ volatile TDirection dir = STOP;
 //#define RF                  10  // Right forward pin
 //#define RR                  11  // Right reverse pin
 
-#define LF                  11   // Left forward pin
-#define LR                  10   // Left reverse pin
-#define RF                  5  // Right forward pin
-#define RR                  6  // Right reverse pin
+#define LF                  5   // Left forward pin correct
+#define LR                  6   // Left reverse pin
+#define RF                  11  // Right forward pin
+#define RR                  10  // Right reverse pin
 
 /*
  *    Alex's State Variables
@@ -212,6 +212,7 @@ void enablePullups()
   // 2 and 3. These are pins PD2 and PD3 respectively.
   // We set bits 2 and 3 in DDRD to 0 to make them inputs.
   DDRD &= 0b00000000;
+  //DDRD &= 0b11110011;
   PORTD |= 0b00001100;
   
 }
@@ -660,7 +661,10 @@ void loop() {
 
 // Uncomment the code below for Step 2 of Activity 3 in Week 8 Studio 2
 
- // forward(0, 100);
+ //forward(0, 50);
+ //reverse(0, 50);
+ //analogWrite(RR, 0);
+ //analogWrite(RF, 75);
 
 // Uncomment the code below for Week 9 Studio 2
 
