@@ -1,19 +1,19 @@
 /*
- * Alex's motor drivers.
- * 
- */
+   Alex's motor drivers.
+
+*/
 
 // Set up Alex's motors. Right now this is empty, but
 // later you will replace it with code to set up the PWMs
 // to drive the motors.
 void setupMotors()
 {
-  /* Our motor set up is:  
-   *    A1IN - Pin 5, PD5, OC0B
-   *    A2IN - Pin 6, PD6, OC0A
-   *    B1IN - Pin 10, PB2, OC1B
-   *    B2In - pIN 11, PB3, OC2A
-   */
+  /* Our motor set up is:
+        A1IN - Pin 5, PD5, OC0B
+        A2IN - Pin 6, PD6, OC0A
+        B1IN - Pin 10, PB2, OC1B
+        B2In - pIN 11, PB3, OC2A
+  */
 }
 
 // Start the PWM for Alex's motors.
@@ -21,16 +21,16 @@ void setupMotors()
 // blank.
 void startMotors()
 {
-  
+
 }
 
 // Convert percentages to PWM values
 int pwmVal(float speed)
 {
-  if(speed < 0.0)
+  if (speed < 0.0)
     speed = 0;
 
-  if(speed > 100.0)
+  if (speed > 100.0)
     speed = 100.0;
 
   return (int) ((speed / 100.0) * 255.0);
@@ -43,6 +43,11 @@ int pwmVal(float speed)
 // continue moving forward indefinitely.
 void forward(float dist, float speed)
 {
+  // Code to tell us how far to move
+  if (dist > 0) deltaDist = dist;
+  else deltaDist = 9999999;
+  newDist = forwardDist + deltaDist;
+
   dir = FORWARD;
   int val = pwmVal(speed);
 
@@ -54,14 +59,10 @@ void forward(float dist, float speed)
   // RF = Right forward pin, RR = Right reverse pin
   // This will be replaced later with bare-metal code.
 
-  int currentDist = forwardDist;
-  while (forwardDist - currentDist < dist) {
-    analogWrite(LF, val);
-    analogWrite(RF, val);
-    analogWrite(LR,0);
-    analogWrite(RR, 0);
-  }
-  if (dist < 0.000001) stop(); // if dist is 0 then it will go infinitely until stop command.
+  analogWrite(LF, val);
+  analogWrite(RF, val);
+  analogWrite(LR, 0);
+  analogWrite(RR, 0);
 
 }
 
@@ -76,7 +77,7 @@ void reverse(float dist, float speed)
   dir = BACKWARD;
   int val = pwmVal(speed);
 
-  // For now we will ignore dist and 
+  // For now we will ignore dist and
   // reverse indefinitely. We will fix this
   // in Week 9.
 
@@ -84,14 +85,11 @@ void reverse(float dist, float speed)
   // RF = Right forward pin, RR = Right reverse pin
   // This will be replaced later with bare-metal code.
 
-  int currentDist = reverseDist;
-  while (reverseDist - currentDist < dist) {
-    analogWrite(LR, val);
-    analogWrite(RR, val);
-    analogWrite(LF, 0);
-    analogWrite(RF, 0);
-  }
-  if (dist < 0.000001) stop(); // if dist is 0 then it will go indefinitely until stop command.
+  analogWrite(LR, val);
+  analogWrite(RR, val);
+  analogWrite(LF, 0);
+  analogWrite(RF, 0);
+  
 }
 
 // Turn Alex left "ang" degrees at speed "speed".

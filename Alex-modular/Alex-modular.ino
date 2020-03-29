@@ -5,19 +5,19 @@
 #include "constants.h"
 
 /*
- * Alex's configuration constants
- */
+   Alex's configuration constants
+*/
 
-// Number of ticks per revolution from the 
+// Number of ticks per revolution from the
 // wheel encoder.
 
-#define COUNTS_PER_REV      1
+#define COUNTS_PER_REV      195
 
 // Wheel circumference in cm.
-// We will use this to calculate forward/backward distance traveled 
+// We will use this to calculate forward/backward distance traveled
 // by taking revs * WHEEL_CIRC
 
-#define WHEEL_CIRC          1
+#define WHEEL_CIRC          23.5
 
 // Motor control pins. You need to adjust these till
 // Alex moves in the correct direction
@@ -32,18 +32,18 @@
 #define RR                  10  // Right reverse pin
 
 /*
- *    Alex's State Variables
- */
+      Alex's State Variables
+*/
 
 // Store the ticks from Alex's left and
 // right encoders.
-volatile unsigned long leftForwardTicks; 
+volatile unsigned long leftForwardTicks;
 volatile unsigned long rightForwardTicks;
 volatile unsigned long leftReverseTicks;
 volatile unsigned long rightReverseTicks;
 
 // Left and right encoder tiks for turning
-volatile unsigned long leftForwardTicksTurns; 
+volatile unsigned long leftForwardTicksTurns;
 volatile unsigned long rightForwardTicksTurns;
 volatile unsigned long leftReverseTicksTurns;
 volatile unsigned long rightReverseTicksTurns;
@@ -57,6 +57,10 @@ volatile unsigned long rightRevs;
 volatile unsigned long forwardDist;
 volatile unsigned long reverseDist;
 
+// Variables to keep track of whether we have moved a commanded distance
+unsigned long deltaDist;
+unsigned long newDist;
+
 typedef enum {
   STOP = 0,
   FORWARD = 1,
@@ -68,9 +72,9 @@ typedef enum {
 volatile TDirection dir = STOP;
 
 /*
- * Alex's setup and run codes
- * 
- */
+   Alex's setup and run codes
+
+*/
 
 void setup() {
   // put your setup code here, to run once:
@@ -88,28 +92,40 @@ void setup() {
 
 void loop() {
 
-// Uncomment the code below for Step 2 of Activity 3 in Week 8 Studio 2
-
- //forward(0, 50);
-
-// Uncomment the code below for Week 9 Studio 2
-
-
- // put your main code here, to run repeatedly:
   TPacket recvPacket; // This holds commands from the Pi
 
   TResult result = readPacket(&recvPacket);
-  
-  if(result == PACKET_OK)
+
+  if (result == PACKET_OK)
     handlePacket(&recvPacket);
-  else
-    if(result == PACKET_BAD)
-    {
-      sendBadPacket();
+  else if (result == PACKET_BAD)
+  {
+    sendBadPacket();
+  }
+  else if (result == PACKET_CHECKSUM_BAD)
+  {
+    sendBadChecksum();
+  }
+
+  // Code to tell how much distance Alex has moved.
+  if (deltaDist > 0) {
+    if (dir == FORWARD) {
+      if (forwardDist > newDist) {
+        deltaDist = 0;
+        newDist = 0;
+        stop();
+      }
+    } else if (dir == BACKWARD) {
+      if (reverseDist > newDist) {
+        deltaDist = 0;
+        newDist = 0;
+        stop();
+      }
+    } else if (dir == STOP) {
+      deltaDist = 0;
+      newDist = 0;
+      stop();
     }
-    else
-      if(result == PACKET_CHECKSUM_BAD)
-      {
-        sendBadChecksum();
-      } 
+  }
+  
 }
