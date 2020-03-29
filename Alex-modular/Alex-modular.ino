@@ -31,6 +31,11 @@
 #define RF                  11  // Right forward pin
 #define RR                  10  // Right reverse pin
 
+// Motor Power Factor for making sure robot goes straight
+// Values will be multiplied to power supplied to each motor
+#define MOTOR_L_FACTOR  1.000
+#define MOTOR_R_FACTOR  0.910
+
 /*
       Alex's State Variables
 */

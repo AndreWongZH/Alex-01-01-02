@@ -59,8 +59,8 @@ void forward(float dist, float speed)
   // RF = Right forward pin, RR = Right reverse pin
   // This will be replaced later with bare-metal code.
 
-  analogWrite(LF, val);
-  analogWrite(RF, val);
+  analogWrite(LF, MOTOR_L_FACTOR*val);
+  analogWrite(RF, MOTOR_R_FACTOR*val);
   analogWrite(LR, 0);
   analogWrite(RR, 0);
 
@@ -74,6 +74,10 @@ void forward(float dist, float speed)
 void reverse(float dist, float speed)
 {
 
+  if (dist > 0) deltaDist = dist;
+  else deltaDist = 9999999;
+  newDist = reverseDist + deltaDist;
+
   dir = BACKWARD;
   int val = pwmVal(speed);
 
@@ -85,8 +89,8 @@ void reverse(float dist, float speed)
   // RF = Right forward pin, RR = Right reverse pin
   // This will be replaced later with bare-metal code.
 
-  analogWrite(LR, val);
-  analogWrite(RR, val);
+  analogWrite(LR, MOTOR_L_FACTOR*val);
+  analogWrite(RR, MOTOR_R_FACTOR*val);
   analogWrite(LF, 0);
   analogWrite(RF, 0);
   
