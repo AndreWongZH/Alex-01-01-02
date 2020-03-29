@@ -53,12 +53,16 @@ void forward(float dist, float speed)
   // LF = Left forward pin, LR = Left reverse pin
   // RF = Right forward pin, RR = Right reverse pin
   // This will be replaced later with bare-metal code.
-  
-  analogWrite(LF, val);
-  analogWrite(RF, val);
-  analogWrite(LR,0);
-  analogWrite(RR, 0);
-  
+
+  int currentDist = forwardDist;
+  while (forwardDist - currentDist < dist) {
+    analogWrite(LF, val);
+    analogWrite(RF, val);
+    analogWrite(LR,0);
+    analogWrite(RR, 0);
+  }
+  if (dist < 0.000001) stop(); // if dist is 0 then it will go infinitely until stop command.
+
 }
 
 // Reverse Alex "dist" cm at speed "speed".
@@ -79,10 +83,15 @@ void reverse(float dist, float speed)
   // LF = Left forward pin, LR = Left reverse pin
   // RF = Right forward pin, RR = Right reverse pin
   // This will be replaced later with bare-metal code.
-  analogWrite(LR, val);
-  analogWrite(RR, val);
-  analogWrite(LF, 0);
-  analogWrite(RF, 0);
+
+  int currentDist = reverseDist;
+  while (reverseDist - currentDist < dist) {
+    analogWrite(LR, val);
+    analogWrite(RR, val);
+    analogWrite(LF, 0);
+    analogWrite(RF, 0);
+  }
+  if (dist < 0.000001) stop(); // if dist is 0 then it will go indefinitely until stop command.
 }
 
 // Turn Alex left "ang" degrees at speed "speed".
