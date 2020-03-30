@@ -110,8 +110,8 @@ void left(float ang, float speed)
   // We will also replace this code with bare-metal later.
   // To turn left we reverse the left wheel and move
   // the right wheel forward.
-  analogWrite(LR, val);
-  analogWrite(RF, val);
+  analogWrite(LR, MOTOR_L_FACTOR*val);
+  analogWrite(RF, MOTOR_R_FACTOR*val);
   analogWrite(LF, 0);
   analogWrite(RR, 0);
 }
@@ -130,8 +130,8 @@ void right(float ang, float speed)
   // We will also replace this code with bare-metal later.
   // To turn right we reverse the right wheel and move
   // the left wheel forward.
-  analogWrite(RR, val);
-  analogWrite(LF, val);
+  analogWrite(RR, MOTOR_R_FACTOR*val);
+  analogWrite(LF, MOTOR_L_FACTOR*val);
   analogWrite(LR, 0);
   analogWrite(RF, 0);
 }

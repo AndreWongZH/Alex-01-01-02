@@ -23,7 +23,7 @@ void leftISR()
       forwardDist = (unsigned long) ((float) leftForwardTicks / COUNTS_PER_REV * WHEEL_CIRC);
       break;
     case (BACKWARD):
-      reverseDist = (unsigned long) ((float) leftForwardTicks / COUNTS_PER_REV * WHEEL_CIRC);
+      reverseDist = (unsigned long) ((float) leftReverseTicks / COUNTS_PER_REV * WHEEL_CIRC);
       leftReverseTicks++;
       break;
     case (LEFT):
