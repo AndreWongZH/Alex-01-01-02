@@ -1,5 +1,6 @@
 #include <serialize.h>
 #include <stdarg.h>
+#include <math.h>
 
 #include "packet.h"
 #include "constants.h"
@@ -18,6 +19,14 @@
 // by taking revs * WHEEL_CIRC
 
 #define WHEEL_CIRC          23.5
+
+// Constants for turning
+#define PI              3.141592
+#define ALEX_LENGTH     16
+#define ALEX_BREADTH    6
+
+float AlexDiagonal = 0.0;
+float AlexCirc = 0.0;
 
 // Motor control pins. You need to adjust these till
 // Alex moves in the correct direction
@@ -66,6 +75,10 @@ volatile unsigned long reverseDist;
 unsigned long deltaDist;
 unsigned long newDist;
 
+// Variables to keep track of stuff
+unsigned long deltaTicks;
+unsigned long targetTicks;
+
 typedef enum {
   STOP = 0,
   FORWARD = 1,
@@ -83,6 +96,9 @@ volatile TDirection dir = STOP;
 
 void setup() {
   // put your setup code here, to run once:
+
+  AlexDiagonal = sqrt((ALEX_LENGTH * ALEX_LENGTH) + (ALEX_BREADTH * ALEX_BREADTH));
+  AlexCirc = PI * AlexDiagonal;
 
   cli();
   setupEINT();
@@ -129,6 +145,27 @@ void loop() {
     } else if (dir == STOP) {
       deltaDist = 0;
       newDist = 0;
+      stop();
+    }
+  }
+
+  // Code to tell how much angle Alex has turned.
+  if (deltaTicks > 0) {
+    if (dir == LEFT) {
+      if (leftReverseTicksTurns >= targetTicks) {
+        deltaTicks = 0;
+        targetTicks = 0;
+        stop();
+      }
+    } else if (dir == RIGHT) {
+      if (rightReverseTicksTurns >= targetTicks) {
+        deltaTicks = 0;
+        targetTicks = 0;
+        stop();
+      }
+    } else if (dir == STOP) {
+      deltaTicks = 0;
+      targetTicks = 0;
       stop();
     }
   }

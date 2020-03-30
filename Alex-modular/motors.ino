@@ -36,6 +36,14 @@ int pwmVal(float speed)
   return (int) ((speed / 100.0) * 255.0);
 }
 
+// Computes ticks required to turn a certain angle
+unsigned long computeDeltaTicks(float ang)
+{
+  unsigned long ticks = (unsigned long) ((ang * AlexCirc * COUNTS_PER_REV) / (360.0 * WHEEL_CIRC));
+
+  return ticks;
+}
+
 // Move Alex forward "dist" cm at speed "speed".
 // "speed" is expressed as a percentage. E.g. 50 is
 // move forward at half speed.
@@ -106,6 +114,10 @@ void left(float ang, float speed)
   dir = LEFT;
   int val = pwmVal(speed);
 
+  if (ang > 0) deltaTicks = computeDeltaTicks(ang);
+  else deltaTicks = 9999999;
+  targetTicks = leftReverseTicksTurns + deltaTicks;
+
   // For now we will ignore ang. We will fix this in Week 9.
   // We will also replace this code with bare-metal later.
   // To turn left we reverse the left wheel and move
@@ -125,6 +137,10 @@ void right(float ang, float speed)
 {
   dir = RIGHT;
   int val = pwmVal(speed);
+
+  if (ang > 0) deltaTicks = computeDeltaTicks(ang);
+  else deltaTicks = 9999999;
+  targetTicks = rightReverseTicksTurns + deltaTicks;
 
   // For now we will ignore ang. We will fix this in Week 9.
   // We will also replace this code with bare-metal later.
