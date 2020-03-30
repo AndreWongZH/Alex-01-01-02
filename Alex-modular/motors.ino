@@ -3,9 +3,8 @@
 
 */
 
-// Set up Alex's motors. Right now this is empty, but
-// later you will replace it with code to set up the PWMs
-// to drive the motors.
+// BARE METAL
+// Set up Alex's motors using PWM.
 void setupMotors()
 {
   /* Our motor set up is:
@@ -14,6 +13,25 @@ void setupMotors()
         B1IN - Pin 10, PB2, OC1B
         B2In - pIN 11, PB3, OC2A
   */
+  // set motor pins to output
+  DDRD |= 0b01100000;
+  DDRB |= 0b00001100;
+  
+  // Enable timer interrupts
+  TIMSK0 |= 0b110;
+  TIMSK1 |= 0b100;
+  TIMSK2 |= 0b10;
+  
+  TCNT0 = 0;
+  TCNT1 = 0;
+  TCNT2 = 0;
+  OCR0A = 128;
+  OCR0B = 128;
+  OCR1B = 128;
+  OCR2A = 128;
+  TCCR0B = 0b00000011;
+  TCCR1B = 0b00000011;
+  TCCR2B = 0b00000011;
 }
 
 // Start the PWM for Alex's motors.
