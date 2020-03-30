@@ -13,7 +13,7 @@ void setupMotors()
         B1IN - Pin 10, PB2, OC1B
         B2In - pIN 11, PB3, OC2A
   */
-  // set motor pins to output
+  // Set motor pins to output
   DDRD |= 0b01100000;
   DDRB |= 0b00001100;
   
@@ -21,25 +21,27 @@ void setupMotors()
   TIMSK0 |= 0b110;
   TIMSK1 |= 0b100;
   TIMSK2 |= 0b10;
-  
+
+  // Init all count and compare values to 0
   TCNT0 = 0;
   TCNT1 = 0;
   TCNT2 = 0;
-  OCR0A = 128;
-  OCR0B = 128;
-  OCR1B = 128;
-  OCR2A = 128;
-  TCCR0B = 0b00000011;
-  TCCR1B = 0b00000011;
-  TCCR2B = 0b00000011;
+  OCR0A = 0; // Pin 6,LR
+  OCR0B = 0; // Pin 5, LF
+  OCR1B = 0; // Pin 10, RR
+  OCR2A = 0; // Pin 11, RF
 }
 
 // Start the PWM for Alex's motors.
-// We will implement this later. For now it is
-// blank.
 void startMotors()
 {
-
+  // start the timers
+  TCCR0A = 0b10100001; // phase correct PWM, clear on match
+  TCCR0B = 0b00000100; // prescaler 256
+  TCCR1A = 0b00100001; // phase correct PWM, 8-bit, clear on match
+  TCCR1B = 0b00000100; // prescaler 256
+  TCCR2A = 0b10000001; // phase correct PWM, clear on match
+  TCCR2B = 0b00000100; // prescaler 256
 }
 
 // Convert percentages to PWM values
