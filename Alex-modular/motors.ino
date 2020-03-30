@@ -32,6 +32,7 @@ void setupMotors()
   OCR2A = 0; // Pin 11, RF
 }
 
+// BARE METAL
 // Start the PWM for Alex's motors.
 void startMotors()
 {
@@ -54,6 +55,25 @@ int pwmVal(float speed)
     speed = 100.0;
 
   return (int) ((speed / 100.0) * 255.0);
+}
+
+// BARE METAL
+// Replacement function for analogWrite
+void writeMotor(int motor, int pwmVal) {
+  switch(motor)
+  {
+    case LR:
+      OCR0A = pwmVal;
+      break;
+    case LF:
+      OCR0B = pwmVal;
+    case RR:
+      OCR1B = pwmVal;
+      break;
+    case RF:
+      OCR2A = pwmVal;
+      break;
+  }
 }
 
 // Move Alex forward "dist" cm at speed "speed".
