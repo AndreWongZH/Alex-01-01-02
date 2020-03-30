@@ -34,7 +34,7 @@
 // Motor Power Factor for making sure robot goes straight
 // Values will be multiplied to power supplied to each motor
 #define MOTOR_L_FACTOR  1.000
-#define MOTOR_R_FACTOR  0.910
+#define MOTOR_R_FACTOR  0.935
 
 /*
       Alex's State Variables

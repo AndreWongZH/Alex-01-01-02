@@ -59,8 +59,8 @@ void forward(float dist, float speed)
   // RF = Right forward pin, RR = Right reverse pin
   // This will be replaced later with bare-metal code.
 
-  analogWrite(LF, MOTOR_L_FACTOR*val);
-  analogWrite(RF, MOTOR_R_FACTOR*val);
+  analogWrite(LF, MOTOR_L_FACTOR * val);
+  analogWrite(RF, MOTOR_R_FACTOR * val);
   analogWrite(LR, 0);
   analogWrite(RR, 0);
 
@@ -89,11 +89,11 @@ void reverse(float dist, float speed)
   // RF = Right forward pin, RR = Right reverse pin
   // This will be replaced later with bare-metal code.
 
-  analogWrite(LR, MOTOR_L_FACTOR*val);
-  analogWrite(RR, MOTOR_R_FACTOR*val);
+  analogWrite(LR, MOTOR_L_FACTOR * val);
+  analogWrite(RR, MOTOR_R_FACTOR * val);
   analogWrite(LF, 0);
   analogWrite(RF, 0);
-  
+
 }
 
 // Turn Alex left "ang" degrees at speed "speed".
@@ -110,8 +110,8 @@ void left(float ang, float speed)
   // We will also replace this code with bare-metal later.
   // To turn left we reverse the left wheel and move
   // the right wheel forward.
-  analogWrite(LR, MOTOR_L_FACTOR*val);
-  analogWrite(RF, MOTOR_R_FACTOR*val);
+  analogWrite(LR, MOTOR_L_FACTOR * val);
+  analogWrite(RF, MOTOR_R_FACTOR * val);
   analogWrite(LF, 0);
   analogWrite(RR, 0);
 }
@@ -130,15 +130,38 @@ void right(float ang, float speed)
   // We will also replace this code with bare-metal later.
   // To turn right we reverse the right wheel and move
   // the left wheel forward.
-  analogWrite(RR, MOTOR_R_FACTOR*val);
-  analogWrite(LF, MOTOR_L_FACTOR*val);
+  analogWrite(RR, MOTOR_R_FACTOR * val);
+  analogWrite(LF, MOTOR_L_FACTOR * val);
   analogWrite(LR, 0);
   analogWrite(RF, 0);
+}
+
+void brake(int brakeFactor)
+{
+  // Braking mechanism, moves in the opposite direction of wherever it is going
+  // This is to ensure Alex stops where we want it to stop.
+  switch (dir) {
+    case (FORWARD):
+      reverse(0, 100);
+      break;
+    case (BACKWARD):
+      forward(0, 100);
+      break;
+    case (LEFT):
+      right(0, 100);
+      break;
+    case (RIGHT):
+      left(0, 100);
+      break;
+  }
+  delay(brakeFactor);
 }
 
 // Stop Alex. To replace with bare-metal code later.
 void stop()
 {
+  brake(25);
+
   dir = STOP;
   analogWrite(LF, 0);
   analogWrite(LR, 0);
