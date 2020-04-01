@@ -183,4 +183,5 @@ void stop()
   analogWrite(LR, 0);
   analogWrite(RF, 0);
   analogWrite(RR, 0);
+  putArduinoToIdle();
 }

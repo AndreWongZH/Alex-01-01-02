@@ -2,6 +2,8 @@
 #include <stdarg.h>
 #include <math.h>
 
+#include <avr/sleep.h>
+
 #include "packet.h"
 #include "constants.h"
 
@@ -43,7 +45,18 @@ float AlexCirc = 0.0;
 // Motor Power Factor for making sure robot goes straight
 // Values will be multiplied to power supplied to each motor
 #define MOTOR_L_FACTOR  1.000
-#define MOTOR_R_FACTOR  0.935
+#define MOTOR_R_FACTOR  0.996
+
+// For sleep mode and power savings
+#define PRR_TWI_MASK            0b10000000
+#define PRR_SPI_MASK            0b00000100
+#define ADCSRA_ADC_MASK         0b10000000
+#define PRR_ADC_MASK            0b00000001
+#define PRR_TIMER2_MASK         0b01000000
+#define PRR_TIMER0_MASK         0b00100000
+#define PRR_TIMER1_MASK         0b00001000
+#define SMCR_SLEEP_ENABLE_MASK  0b00000001
+#define SMCR_IDLE_MODE_MASK     0b11110001
 
 /*
       Alex's State Variables
@@ -104,11 +117,13 @@ void setup() {
   setupEINT();
   setupSerial();
   startSerial();
+  setupPowerSaving();
   setupMotors();
   startMotors();
   enablePullups();
   initializeState();
   sei();
+  stop();
 }
 
 void loop() {
