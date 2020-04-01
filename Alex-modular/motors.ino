@@ -3,9 +3,8 @@
 
 */
 
-// Set up Alex's motors. Right now this is empty, but
-// later you will replace it with code to set up the PWMs
-// to drive the motors.
+// BARE METAL
+// Set up Alex's motors using PWM.
 void setupMotors()
 {
   /* Our motor set up is:
@@ -14,14 +13,36 @@ void setupMotors()
         B1IN - Pin 10, PB2, OC1B
         B2In - pIN 11, PB3, OC2A
   */
+  // Set motor pins to output
+  DDRD |= 0b01100000;
+  DDRB |= 0b00001100;
+  
+  // Enable timer interrupts
+  TIMSK0 |= 0b110;
+  TIMSK1 |= 0b100;
+  TIMSK2 |= 0b10;
+
+  // Init all count and compare values to 0
+  TCNT0 = 0;
+  TCNT1 = 0;
+  TCNT2 = 0;
+  OCR0A = 0; // Pin 6,LR
+  OCR0B = 0; // Pin 5, LF
+  OCR1B = 0; // Pin 10, RR
+  OCR2A = 0; // Pin 11, RF
 }
 
+// BARE METAL
 // Start the PWM for Alex's motors.
-// We will implement this later. For now it is
-// blank.
 void startMotors()
 {
-
+  // start the timers
+  TCCR0A = 0b10100001; // phase correct PWM, clear on match
+  TCCR0B = 0b00000100; // prescaler 256
+  TCCR1A = 0b00100001; // phase correct PWM, 8-bit, clear on match
+  TCCR1B = 0b00000100; // prescaler 256
+  TCCR2A = 0b10000001; // phase correct PWM, clear on match
+  TCCR2B = 0b00000100; // prescaler 256
 }
 
 // Convert percentages to PWM values
@@ -43,6 +64,24 @@ unsigned long computeDeltaTicks(float ang)
 
   return ticks;
 }
+
+// BARE METAL
+// Replacement function for analogWrite
+void writeMotor(int motor, int pwmVal) {
+  switch(motor)
+  {
+    case LR:
+      OCR0A = pwmVal;
+      break;
+    case LF:
+      OCR0B = pwmVal;
+    case RR:
+      OCR1B = pwmVal;
+      break;
+    case RF:
+      OCR2A = pwmVal;
+      break;
+  }
 
 // Move Alex forward "dist" cm at speed "speed".
 // "speed" is expressed as a percentage. E.g. 50 is
@@ -67,11 +106,14 @@ void forward(float dist, float speed)
   // RF = Right forward pin, RR = Right reverse pin
   // This will be replaced later with bare-metal code.
 
-  analogWrite(LF, MOTOR_L_FACTOR * val);
-  analogWrite(RF, MOTOR_R_FACTOR * val);
-  analogWrite(LR, 0);
-  analogWrite(RR, 0);
-
+//  analogWrite(LF, MOTOR_L_FACTOR * val);
+//  analogWrite(RF, MOTOR_R_FACTOR * val);
+//  analogWrite(LR, 0);
+//  analogWrite(RR, 0);
+  writeMotor(LF, MOTOR_L_FACTOR * val);
+  writeMotor(RF, MOTOR_R_FACTOR * val);
+  writeMotor(LR, 0);
+  writeMotor(RR, 0);
 }
 
 // Reverse Alex "dist" cm at speed "speed".
@@ -97,11 +139,14 @@ void reverse(float dist, float speed)
   // RF = Right forward pin, RR = Right reverse pin
   // This will be replaced later with bare-metal code.
 
-  analogWrite(LR, MOTOR_L_FACTOR * val);
-  analogWrite(RR, MOTOR_R_FACTOR * val);
-  analogWrite(LF, 0);
-  analogWrite(RF, 0);
-
+//  analogWrite(LR, MOTOR_L_FACTOR * val);
+//  analogWrite(RR, MOTOR_R_FACTOR * val);
+//  analogWrite(LF, 0);
+//  analogWrite(RF, 0);
+  writeMotor(LR, MOTOR_L_FACTOR * val);
+  writeMotor(RR, MOTOR_R_FACTOR * val);
+  writeMotor(LF, 0);
+  writeMotor(RF, 0);
 }
 
 // Turn Alex left "ang" degrees at speed "speed".
@@ -122,10 +167,14 @@ void left(float ang, float speed)
   // We will also replace this code with bare-metal later.
   // To turn left we reverse the left wheel and move
   // the right wheel forward.
-  analogWrite(LR, MOTOR_L_FACTOR * val);
-  analogWrite(RF, MOTOR_R_FACTOR * val);
-  analogWrite(LF, 0);
-  analogWrite(RR, 0);
+//  analogWrite(LR, MOTOR_L_FACTOR * val);
+//  analogWrite(RF, MOTOR_R_FACTOR * val);
+//  analogWrite(LF, 0);
+//  analogWrite(RR, 0);
+  writeMotor(LR, MOTOR_L_FACTOR * val);
+  writeMotor(RF, MOTOR_R_FACTOR * val);
+  writeMotor(LF, 0);
+  writeMotor(RR, 0);
 }
 
 // Turn Alex right "ang" degrees at speed "speed".
@@ -146,10 +195,14 @@ void right(float ang, float speed)
   // We will also replace this code with bare-metal later.
   // To turn right we reverse the right wheel and move
   // the left wheel forward.
-  analogWrite(RR, MOTOR_R_FACTOR * val);
-  analogWrite(LF, MOTOR_L_FACTOR * val);
-  analogWrite(LR, 0);
-  analogWrite(RF, 0);
+//  analogWrite(RR, MOTOR_R_FACTOR * val);
+//  analogWrite(LF, MOTOR_L_FACTOR * val);
+//  analogWrite(LR, 0);
+//  analogWrite(RF, 0);
+  writeMotor(RR, MOTOR_R_FACTOR * val);
+  writeMotor(LF, MOTOR_L_FACTOR * val);
+  writeMotor(LR, 0);
+  writeMotor(RF, 0);
 }
 
 void brake(int brakeFactor)
@@ -179,8 +232,12 @@ void stop()
   brake(25);
 
   dir = STOP;
-  analogWrite(LF, 0);
-  analogWrite(LR, 0);
-  analogWrite(RF, 0);
-  analogWrite(RR, 0);
+//  analogWrite(LF, 0);
+//  analogWrite(LR, 0);
+//  analogWrite(RF, 0);
+//  analogWrite(RR, 0);
+  writeMotor(LF, 0);
+  writeMotor(LR, 0);
+  writeMotor(RF, 0);
+  writeMotor(RR, 0);
 }
