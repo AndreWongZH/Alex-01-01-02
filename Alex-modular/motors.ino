@@ -99,11 +99,14 @@ void forward(float dist, float speed)
   // RF = Right forward pin, RR = Right reverse pin
   // This will be replaced later with bare-metal code.
 
-  analogWrite(LF, MOTOR_L_FACTOR * val);
-  analogWrite(RF, MOTOR_R_FACTOR * val);
-  analogWrite(LR, 0);
-  analogWrite(RR, 0);
-
+//  analogWrite(LF, MOTOR_L_FACTOR * val);
+//  analogWrite(RF, MOTOR_R_FACTOR * val);
+//  analogWrite(LR, 0);
+//  analogWrite(RR, 0);
+  writeMotor(LF, MOTOR_L_FACTOR * val);
+  writeMotor(RF, MOTOR_R_FACTOR * val);
+  writeMotor(LR, 0);
+  writeMotor(RR, 0);
 }
 
 // Reverse Alex "dist" cm at speed "speed".
@@ -129,11 +132,14 @@ void reverse(float dist, float speed)
   // RF = Right forward pin, RR = Right reverse pin
   // This will be replaced later with bare-metal code.
 
-  analogWrite(LR, MOTOR_L_FACTOR * val);
-  analogWrite(RR, MOTOR_R_FACTOR * val);
-  analogWrite(LF, 0);
-  analogWrite(RF, 0);
-
+//  analogWrite(LR, MOTOR_L_FACTOR * val);
+//  analogWrite(RR, MOTOR_R_FACTOR * val);
+//  analogWrite(LF, 0);
+//  analogWrite(RF, 0);
+  writeMotor(LR, MOTOR_L_FACTOR * val);
+  writeMotor(RR, MOTOR_R_FACTOR * val);
+  writeMotor(LF, 0);
+  writeMotor(RF, 0);
 }
 
 // Turn Alex left "ang" degrees at speed "speed".
@@ -150,10 +156,14 @@ void left(float ang, float speed)
   // We will also replace this code with bare-metal later.
   // To turn left we reverse the left wheel and move
   // the right wheel forward.
-  analogWrite(LR, MOTOR_L_FACTOR * val);
-  analogWrite(RF, MOTOR_R_FACTOR * val);
-  analogWrite(LF, 0);
-  analogWrite(RR, 0);
+//  analogWrite(LR, MOTOR_L_FACTOR * val);
+//  analogWrite(RF, MOTOR_R_FACTOR * val);
+//  analogWrite(LF, 0);
+//  analogWrite(RR, 0);
+  writeMotor(LR, MOTOR_L_FACTOR * val);
+  writeMotor(RF, MOTOR_R_FACTOR * val);
+  writeMotor(LF, 0);
+  writeMotor(RR, 0);
 }
 
 // Turn Alex right "ang" degrees at speed "speed".
@@ -170,10 +180,14 @@ void right(float ang, float speed)
   // We will also replace this code with bare-metal later.
   // To turn right we reverse the right wheel and move
   // the left wheel forward.
-  analogWrite(RR, MOTOR_R_FACTOR * val);
-  analogWrite(LF, MOTOR_L_FACTOR * val);
-  analogWrite(LR, 0);
-  analogWrite(RF, 0);
+//  analogWrite(RR, MOTOR_R_FACTOR * val);
+//  analogWrite(LF, MOTOR_L_FACTOR * val);
+//  analogWrite(LR, 0);
+//  analogWrite(RF, 0);
+  writeMotor(RR, MOTOR_R_FACTOR * val);
+  writeMotor(LF, MOTOR_L_FACTOR * val);
+  writeMotor(LR, 0);
+  writeMotor(RF, 0);
 }
 
 void brake(int brakeFactor)
@@ -203,8 +217,12 @@ void stop()
   brake(25);
 
   dir = STOP;
-  analogWrite(LF, 0);
-  analogWrite(LR, 0);
-  analogWrite(RF, 0);
-  analogWrite(RR, 0);
+//  analogWrite(LF, 0);
+//  analogWrite(LR, 0);
+//  analogWrite(RF, 0);
+//  analogWrite(RR, 0);
+  writeMotor(LF, 0);
+  writeMotor(LR, 0);
+  writeMotor(RF, 0);
+  writeMotor(RR, 0);
 }
