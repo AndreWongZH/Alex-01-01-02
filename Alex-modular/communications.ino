@@ -7,7 +7,7 @@
 TResult readPacket(TPacket *packet)
 {
     // Reads in data from the serial port and
-    // deserializes it. Returns deserialized
+    // deserializes it.Returns deserialized
     // data in "packet".
     
     char buffer[PACKET_SIZE];
@@ -133,62 +133,47 @@ void sendResponse(TPacket *packet)
  * Setup and start codes for serial communications
  * 
  */
-// BARE METAL
+// Set up the serial connection. For now we are using 
+// Arduino Wiring, you will replace this later
+// with bare-metal code.
 void setupSerial()
 {
+  // To replace later with bare-metal.
   Serial.begin(9600);
-  // baud rate = 9600
-//  UBRR0L = 103;
-//  UBRR0H = 0;
-//
-//  // 8N1
-//  UCSR0C = 0b00000110;
-//  UCSR0A = 0;
 }
 
-// BARE METAL
+// Start the serial connection. For now we are using
+// Arduino wiring and this function is empty. We will
+// replace this later with bare-metal code.
+
 void startSerial()
-{ 
-  // Enable RXC interrupt, receiver and transmitter
-  // Capture USART_UDRE_vect
-//  UCSR0B = 0b10111000;
+{
+  // Empty for now. To be replaced with bare-metal code
+  // later on.
+  
 }
 
-// BARE METAL
 // Read the serial port. Returns the read character in
 // ch if available. Also returns TRUE if ch is valid. 
+// This will be replaced later with bare-metal code.
+
 int readSerial(char *buffer)
 {
+
   int count=0;
 
   while(Serial.available())
     buffer[count++] = Serial.read();
-//  TPacket packet;
-//  do
-//  {
-//    packet = readBuffer(&_recvBuffer, &buffer[count]);
-//
-//    if (packet == BUFFER_OK)
-//      count++;
-//  } while (packet == BUFFER_OK);
-//
+
   return count;
 }
 
-// BARE METAL
+// Write to the serial port. Replaced later with
+// bare-metal code
+
 void writeSerial(const char *buffer, int len)
 {
   Serial.write(buffer, len);
-//  TPacket packet = BUFFER_OK;
-//
-//  int i;
-//  for (i=1; i<len && result == BUFFER_OK; i++)
-//  {
-//    result = writeBuffer(&_xmitBuffer, buffer[i]);
-//  }
-//
-//  UDR0 = buffer[0];
-//  UCSR0B |= 0b00010000; // enable UDRE interrupt
 }
 
 void handleCommand(TPacket *command)
