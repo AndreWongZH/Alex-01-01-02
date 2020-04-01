@@ -241,4 +241,5 @@ void stop()
   writeMotor(LR, 0);
   writeMotor(RF, 0);
   writeMotor(RR, 0);
+  putArduinoToIdle();
 }
