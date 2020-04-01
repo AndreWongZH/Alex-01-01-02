@@ -149,6 +149,7 @@ void handleError(TResult error)
 
 void *uartReceiveThread(void *p)
 {
+    // WE DO NOT FORWARD ANY ACKNOWLEDGEMENT PACKET FROM THE SERVER TO CLIENT AS IT IS BUGGED
 	char buffer[PACKET_SIZE];
 	int len;
 	TPacket packet;
@@ -166,13 +167,13 @@ void *uartReceiveThread(void *p)
 			if(result == PACKET_OK)
 			{
 				counter=0;
-				handleUARTPacket(&packet);
+				//handleUARTPacket(&packet);
 			}
 			else 
 				if(result != PACKET_INCOMPLETE)
 				{
 					printf("PACKET ERROR\n");
-					handleError(result);
+					//handleError(result);
 				} // result
 		} // len > 0
 	} // while
