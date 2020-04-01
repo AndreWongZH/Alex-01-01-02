@@ -82,6 +82,7 @@ void writeMotor(int motor, int pwmVal) {
       OCR2A = pwmVal;
       break;
   }
+}
 
 // Move Alex forward "dist" cm at speed "speed".
 // "speed" is expressed as a percentage. E.g. 50 is
