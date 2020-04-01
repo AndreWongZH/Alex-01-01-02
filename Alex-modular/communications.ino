@@ -172,7 +172,7 @@ int readSerial(char *buffer)
 //      count++;
 //  } while (packet == BUFFER_OK);
 //
-//  return count;
+  return count;
 }
 
 // BARE METAL
