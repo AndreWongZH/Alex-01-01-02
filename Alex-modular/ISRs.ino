@@ -80,19 +80,23 @@ ISR(INT1_vect)
 
 // BARE METAL
 // ISRs for serial comms
-char dataRecv, dataSend;
-
-ISR(USART_RX_vect)
-{
-  // Write received data to dataRecv
-  dataRecv = UDR0;
-}
-
-ISR(USART_UDRE_vect)
-{
-  // Write dataSend to UDR0
-  // Disable UDRE interrupt
-  unsigned char data;
-  UDR0 = dataSend;
-  UCSR0B = 0b10011000; // clrs UDRIE0
-}
+// Write data received from UDR0 to the receive buffer
+//ISR(USART_RX_vect)
+//{
+//  // Write received data to dataRecv
+//  unsigned char data = UDR0;
+//  writeBuffer(&_recvBuffer, data);
+//}
+//
+//ISR(USART_UDRE_vect)
+//{
+//  unsigned char data;
+//  TPacket packet = readBuffer(&_xmitBuffer, &data);
+//
+//  // if available, read from transmit buffer
+//  // else disable UDRE interrupt
+//  if (packet == BUFFER_OK)
+//    UDR0 = data;
+//  else if (result == BUFFER_EMPTY)
+//    UCSR0B &= 0b11011111; // clrs UDRIE0
+//}

@@ -136,43 +136,59 @@ void sendResponse(TPacket *packet)
 // BARE METAL
 void setupSerial()
 {
-  //Serial.begin(9600);
-  // Set up 115200 when using Serial Monitor
-  UBRR0L = 103;
-  UBRR0H = 0;
-
-  // 8N1
-  UCSR0C = 0b00000110;
-  UCSR0A = 0;
+  Serial.begin(9600);
+  // baud rate = 9600
+//  UBRR0L = 103;
+//  UBRR0H = 0;
+//
+//  // 8N1
+//  UCSR0C = 0b00000110;
+//  UCSR0A = 0;
 }
 
 // BARE METAL
 void startSerial()
 { 
   // Enable RXC interrupt, receiver and transmitter
-  UCSR0B = 0b10011000;
+  // Capture USART_UDRE_vect
+//  UCSR0B = 0b10111000;
 }
 
+// BARE METAL
 // Read the serial port. Returns the read character in
 // ch if available. Also returns TRUE if ch is valid. 
-// This will be replaced later with bare-metal code.
 int readSerial(char *buffer)
 {
   int count=0;
 
-  //while(Serial.available())
-    //buffer[count++] = Serial.read();
-  buffer[count++] = dataRecv;
-
-  return count;
+  while(Serial.available())
+    buffer[count++] = Serial.read();
+//  TPacket packet;
+//  do
+//  {
+//    packet = readBuffer(&_recvBuffer, &buffer[count]);
+//
+//    if (packet == BUFFER_OK)
+//      count++;
+//  } while (packet == BUFFER_OK);
+//
+//  return count;
 }
 
 // BARE METAL
 void writeSerial(const char *buffer, int len)
 {
-  //Serial.write(buffer, len);
-//  dataSend = buffer
-//  UCSR0B = 0b10111000;
+  Serial.write(buffer, len);
+//  TPacket packet = BUFFER_OK;
+//
+//  int i;
+//  for (i=1; i<len && result == BUFFER_OK; i++)
+//  {
+//    result = writeBuffer(&_xmitBuffer, buffer[i]);
+//  }
+//
+//  UDR0 = buffer[0];
+//  UCSR0B |= 0b00010000; // enable UDRE interrupt
 }
 
 void handleCommand(TPacket *command)
