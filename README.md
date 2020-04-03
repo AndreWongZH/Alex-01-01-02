@@ -62,8 +62,13 @@ steps to start the lidar
   export ROS_MASTER_URI=http://lcoalhost:11311/
   ```
 
+## Power saving
 
-
+On Raspberry Pi, run the following lines
+* Turn off HDMI:
+   ```
+   /usr/bin/tvservice -o
+   ```
 
 
 
