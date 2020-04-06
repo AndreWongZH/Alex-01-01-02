@@ -3,6 +3,8 @@
 #include <math.h>
 
 #include <avr/sleep.h>
+#include <avr/io.h>
+#include <avr/interrupt.h>
 
 #include "packet.h"
 #include "constants.h"
@@ -118,9 +120,9 @@ void setup() {
   setupSerial();
   startSerial();
   setupPowerSaving();
+  enablePullups();
   setupMotors();
   startMotors();
-  enablePullups();
   initializeState();
   sei();
   stop();

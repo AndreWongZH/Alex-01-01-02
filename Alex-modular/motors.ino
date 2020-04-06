@@ -75,6 +75,7 @@ void writeMotor(int motor, int pwmVal) {
       break;
     case LF:
       OCR0B = pwmVal;
+      break;
     case RR:
       OCR1B = pwmVal;
       break;

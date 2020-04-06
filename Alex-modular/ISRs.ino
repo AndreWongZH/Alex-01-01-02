@@ -101,3 +101,19 @@ ISR(INT1_vect)
 //  else if (result == BUFFER_EMPTY)
 //    UCSR0B &= 0b11011111; // clrs UDRIE0
 //}
+
+ISR(TIMER0_COMPA_vect) {
+
+}
+
+ISR(TIMER0_COMPB_vect) {
+  
+}
+
+ISR(TIMER1_COMPB_vect) {
+  
+}
+
+ISR(TIMER2_COMPA_vect){
+  
+}
