@@ -17,7 +17,10 @@ void handleError(const char *buffer)
 	switch(buffer[1])
 	{
 		case RESP_OK:
-			printf("Command / Status OK\n");
+			printf("Alex is OK and ready to execute movement\n");
+			break;
+		case RESP_DONE:
+			printf("Alex has done moving :D\n");
 			break;
 
 		case RESP_BAD_PACKET:
@@ -112,30 +115,29 @@ void sendData(void *conn, const char *buffer, int len)
 
 void *readerThread(void *conn)
 {
-	char buffer[128];
-	int len;
 
 	while(networkActive)
 	{
+		int len;
+		char buffer[128];
 		/* TODO: Insert SSL read here into buffer */
-		len = sslRead(conn, buffer, len);
+		len = sslRead(conn, buffer, sizeof(buffer));
 
-        printf("read %d bytes from server.\n", len);
+	        printf("read %d bytes from server.\n", len);
 		
 		/* END TODO */
 
 		networkActive = (len > 0);
 
 		if(networkActive)
-			printf("Hello\n");
-			//handleNetwork(buffer, len);
+			handleNetwork(buffer, len);
 	}
 
 	printf("Exiting network listener thread\n");
     
     /* TODO: Stop the client loop and call EXIT_THREAD */
-	//stopClient();
-	//EXIT_THREAD(conn);
+	stopClient();
+	EXIT_THREAD(conn);
 
 
     /* END TODO */
@@ -159,17 +161,25 @@ void getParams(int32_t *params)
 void getFixedParams(int32_t* params, char ch) {
 	switch (ch) {
 		case 'w':
-			params[0] = 10;
-			params[1] = 75;
-		case 'a':
-			params[0] = 10;
-			params[1] = 100;
 		case 's':
-			params[0] = 10;
+			params[0] = 15;
 			params[1] = 100;
+			break;
+		case 'a':
 		case 'd':
-			params[0] = 10;
+			params[0] = 15;
 			params[1] = 100;
+			break;
+		case 'h':
+		case 'k':
+			params[0] = 90;
+			params[1] = 70;
+			break;
+		case 'u':
+		case 'j':
+			params[0] = 30;
+			params[1] = 100;
+			break;
 	}
 }
 
@@ -181,6 +191,8 @@ void *writerThread(void *conn)
 	{
 		char ch;
 		printf("Command (f=forward, b=reverse, l=turn left, r=turn right, s=stop, c=clear stats, g=get stats q=exit)\n");
+		printf("Command (w=forward 15cm, s=reverse 15cm, a=turn left 10 degrees, d=turn right 10 degrees)\n");
+		printf("Command (u=forward 30cm, j=reverse 30cm, h=turn left 90 degrees, k=turn right 90 degrees)\n");
 		scanf("%c", &ch);
 
 		// Purge extraneous characters from input stream
@@ -223,16 +235,20 @@ void *writerThread(void *conn)
 				break;
 			case 'w':	
 			case 'a':
+			case 'h':
+			case 'k':
 			case 's':
 			case 'd':
+			case 'u':
+			case 'j':
 					getFixedParams(params, ch);
-					if (ch == 'w')
+					if (ch == 'w' || ch == 'u')
 						buffer[1] = 'f';
-					else if (ch == 'a')
+					else if (ch == 'a' || ch == 'h')
 						buffer[1] = 'l';
-					else if (ch == 's')
+					else if (ch == 's' || ch == 'j')
 						buffer[1] = 'b';
-					else if (ch == 'd')
+					else if (ch == 'd' || ch == 'k')
 						buffer[1] = 'r';
 
 					memcpy(&buffer[2], params, sizeof(params));
@@ -246,7 +262,7 @@ void *writerThread(void *conn)
 	printf("Exiting keyboard thread\n");
 
     /* TODO: Stop the client loop and call EXIT_THREAD */
-	//stopClient();
+	stopClient();
 	EXIT_THREAD(conn);
     /* END TODO */
 }
@@ -260,8 +276,8 @@ void *writerThread(void *conn)
 #define CLIENT_CERT_FNAME "laptop.crt"
 #define CLIENT_KEY_FNAME "laptop.key"
 #define SERVER_NAME_ON_CERT "alex.epp.com"
-
 /* END TODO */
+
 void connectToServer(const char *serverName, int portNum)
 {
     /* TODO: Create a new client */
@@ -269,27 +285,17 @@ void connectToServer(const char *serverName, int portNum)
     /* END TODO */
 }
 
-int main(int ac, char **av)
+int main()
 {
-	if(ac != 3)
-	{
-		fprintf(stderr, "\n\n%s <IP address> <Port Number>\n\n", av[0]);
-		exit(-1);
-	}
-
     networkActive = 1;
-   // connectToServer(av[1], atoi(av[2]));
 
     /* TODO: Add in while loop to prevent main from exiting while the
     client loop is running */
+    	// server name and portnumber here is hard coded here. No input parameters required when running the client server
 	connectToServer(SERVER_NAME, PORT_NUM);
-	while(client_is_running()) {
-	//	connectToServer(SERVER_NAME, PORT_NUM);
-		
-	}
-
-
+	while(client_is_running());
 
     /* END TODO */
 	printf("\nMAIN exiting\n\n");
+	printf("\nClient closed, have a great day!\n\n");
 }
