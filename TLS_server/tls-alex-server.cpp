@@ -87,14 +87,14 @@ void handleResponse(TPacket *packet)
 			resp[0] = NET_ERROR_PACKET;
 			resp[1] = RESP_OK;
 			sendNetworkData(resp, sizeof(resp));
-		break;
+		    break;
 
 		case RESP_STATUS:
 			handleStatus(packet);
-		break;
+		    break;
 
 		default:
-		printf("Boo\n");
+		    printf("Boo\n");
 	}
 }
 
@@ -167,7 +167,7 @@ void *uartReceiveThread(void *p)
 			if(result == PACKET_OK)
 			{
 				counter=0;
-				//handleUARTPacket(&packet);
+				handleUARTPacket(&packet);
 			}
 			else 
 				if(result != PACKET_INCOMPLETE)
@@ -188,8 +188,9 @@ void *uartReceiveThread(void *p)
 
 void sendNetworkData(const char *data, int len)
 {
+    int exit = 0;
 	// Send only if network is active
-	if(networkActive)
+	if(networkActive && !exit)
 	{
         // Use this to store the number of bytes actually written to the TLS connection.
         int c;
@@ -207,7 +208,8 @@ void sendNetworkData(const char *data, int len)
         }
 
 		// Network is still active if we can write more then 0 bytes.
-		networkActive = (c > 0);
+		//networkActive = (c > 0);
+        exit = (c <= 0);
 	}
 }
 
@@ -311,8 +313,9 @@ void *worker(void *conn)
 		// As long as we are getting data, network is active
 		networkActive=(len > 0);
 
-		if(len > 0)
+		if(len > 0) {
 			handleNetworkData(conn, buffer, len);
+        }
 		else
 			if(len < 0)
 				perror("ERROR READING NETWORK: ");
