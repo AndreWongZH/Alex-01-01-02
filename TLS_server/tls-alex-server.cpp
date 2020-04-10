@@ -89,6 +89,15 @@ void handleResponse(TPacket *packet)
 			sendNetworkData(resp, sizeof(resp));
 		    break;
 
+        // handle case where alex is done moving
+        case RESP_DONE:
+            char done[2];
+            printf("Alex done moving\n");
+            done[0] = NET_ERROR_PACKET;
+            done[1] = RESP_DONE;
+            sendNetworkData(done, sizeof(done));
+            break;
+
 		case RESP_STATUS:
 			handleStatus(packet);
 		    break;

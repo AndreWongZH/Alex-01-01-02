@@ -118,6 +118,14 @@ void sendOK()
   sendResponse(&okPacket);  
 }
 
+void sendDone()
+{
+  TPacket donePacket;
+  donePacket.packetType = PACKET_TYPE_RESPONSE;
+  donePacket.command = RESP_DONE;
+  sendResponse(&donePacket);  
+}
+
 void sendResponse(TPacket *packet)
 {
   // Takes a packet, serializes it then sends it out
@@ -184,6 +192,7 @@ void handleCommand(TPacket *command)
     case COMMAND_FORWARD:
         sendOK();
         forward((float) command->params[0], (float) command->params[1]);
+        sendDone();
       break;
 
     /*
@@ -193,19 +202,23 @@ void handleCommand(TPacket *command)
     case COMMAND_REVERSE:
         sendOK();
         reverse((float) command->params[0], (float) command->params[1]);
+        sendDone();
         break;
       
     case COMMAND_TURN_LEFT:
         sendOK();
         left((float) command->params[0], (float) command->params[1]);
+        sendDone();
         break;
     case COMMAND_TURN_RIGHT:
         sendOK();
         right((float) command->params[0], (float) command->params[1]);
+        sendDone();
         break;
     case COMMAND_STOP:
         sendOK();
         stop();
+        sendDone();
         break;
     case COMMAND_GET_STATS:
         sendStatus();
