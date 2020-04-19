@@ -1,3 +1,8 @@
+/*
+  Alex's Power Management features.
+ */
+
+// Turns off the Watchdog Timer.
 void WDT_off(void)
 {
   // clear global interrupt
@@ -12,6 +17,7 @@ void WDT_off(void)
   sei();
 }
 
+// Setup power saving
 void setupPowerSaving()
 {
   // Turn off the Watchdog Timer
@@ -38,6 +44,7 @@ void setupPowerSaving()
   PORTB &= 0b11011111;
 }
 
+// Puts Alex to sleep
 void putArduinoToIdle()
 {
   // Modify PRR to shut down TIMER 0, 1, and 2
@@ -59,4 +66,3 @@ void putArduinoToIdle()
   PRR &= (~PRR_TIMER1_MASK);
   PRR &= (~PRR_TIMER0_MASK);
 }
-

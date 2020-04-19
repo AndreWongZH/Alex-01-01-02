@@ -34,17 +34,12 @@ float AlexCirc = 0.0;
 
 // Motor control pins. You need to adjust these till
 // Alex moves in the correct direction
-//#define LF                  6   // Left forward pin
-//#define LR                  5   // Left reverse pin
-//#define RF                  10  // Right forward pin
-//#define RR                  11  // Right reverse pin
-
-#define LF                  5   // Left forward pin correct
+#define LF                  5   // Left forward pin
 #define LR                  6   // Left reverse pin
 #define RF                  11  // Right forward pin
 #define RR                  10  // Right reverse pin
 
-// Motor Power Factor for making sure robot goes straight
+// Motor Power Factor for making sure Alex goes straight
 // Values will be multiplied to power supplied to each motor
 #define MOTOR_L_FACTOR  1.000
 #define MOTOR_R_FACTOR  0.996

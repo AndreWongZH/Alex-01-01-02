@@ -100,18 +100,10 @@ void forward(float dist, float speed)
   dir = FORWARD;
   int val = pwmVal(speed);
 
-  // For now we will ignore dist and move
-  // forward indefinitely. We will fix this
-  // in Week 9.
-
   // LF = Left forward pin, LR = Left reverse pin
   // RF = Right forward pin, RR = Right reverse pin
-  // This will be replaced later with bare-metal code.
 
-//  analogWrite(LF, MOTOR_L_FACTOR * val);
-//  analogWrite(RF, MOTOR_R_FACTOR * val);
-//  analogWrite(LR, 0);
-//  analogWrite(RR, 0);
+  // BARE METAL
   writeMotor(LF, MOTOR_L_FACTOR * val);
   writeMotor(RF, MOTOR_R_FACTOR * val);
   writeMotor(LR, 0);
@@ -133,18 +125,10 @@ void reverse(float dist, float speed)
   dir = BACKWARD;
   int val = pwmVal(speed);
 
-  // For now we will ignore dist and
-  // reverse indefinitely. We will fix this
-  // in Week 9.
-
   // LF = Left forward pin, LR = Left reverse pin
   // RF = Right forward pin, RR = Right reverse pin
-  // This will be replaced later with bare-metal code.
 
-//  analogWrite(LR, MOTOR_L_FACTOR * val);
-//  analogWrite(RR, MOTOR_R_FACTOR * val);
-//  analogWrite(LF, 0);
-//  analogWrite(RF, 0);
+  // BARE METAL
   writeMotor(LR, MOTOR_L_FACTOR * val);
   writeMotor(RR, MOTOR_R_FACTOR * val);
   writeMotor(LF, 0);
@@ -165,14 +149,10 @@ void left(float ang, float speed)
   else deltaTicks = 9999999;
   targetTicks = leftReverseTicksTurns + deltaTicks;
 
-  // For now we will ignore ang. We will fix this in Week 9.
-  // We will also replace this code with bare-metal later.
   // To turn left we reverse the left wheel and move
   // the right wheel forward.
-//  analogWrite(LR, MOTOR_L_FACTOR * val);
-//  analogWrite(RF, MOTOR_R_FACTOR * val);
-//  analogWrite(LF, 0);
-//  analogWrite(RR, 0);
+
+  // BARE METAL
   writeMotor(LR, MOTOR_L_FACTOR * val);
   writeMotor(RF, MOTOR_R_FACTOR * val);
   writeMotor(LF, 0);
@@ -192,25 +172,22 @@ void right(float ang, float speed)
   if (ang > 0) deltaTicks = computeDeltaTicks(ang);
   else deltaTicks = 9999999;
   targetTicks = rightReverseTicksTurns + deltaTicks;
-
-  // For now we will ignore ang. We will fix this in Week 9.
-  // We will also replace this code with bare-metal later.
+  
   // To turn right we reverse the right wheel and move
   // the left wheel forward.
-//  analogWrite(RR, MOTOR_R_FACTOR * val);
-//  analogWrite(LF, MOTOR_L_FACTOR * val);
-//  analogWrite(LR, 0);
-//  analogWrite(RF, 0);
+
+  // BARE METAL
   writeMotor(RR, MOTOR_R_FACTOR * val);
   writeMotor(LF, MOTOR_L_FACTOR * val);
   writeMotor(LR, 0);
   writeMotor(RF, 0);
 }
 
+// Braking mechanism, moves in the opposite direction of wherever it is going
+// This is to ensure Alex stops where we want it to stop.
+// This function is called in stop() when Alex stops.
 void brake(int brakeFactor)
 {
-  // Braking mechanism, moves in the opposite direction of wherever it is going
-  // This is to ensure Alex stops where we want it to stop.
   switch (dir) {
     case (FORWARD):
       reverse(0, 100);
@@ -228,16 +205,14 @@ void brake(int brakeFactor)
   delay(brakeFactor);
 }
 
-// Stop Alex. To replace with bare-metal code later.
+// Stop Alex
 void stop()
 {
   brake(25);
 
   dir = STOP;
-//  analogWrite(LF, 0);
-//  analogWrite(LR, 0);
-//  analogWrite(RF, 0);
-//  analogWrite(RR, 0);
+
+  // BARE METAL
   writeMotor(LF, 0);
   writeMotor(LR, 0);
   writeMotor(RF, 0);
