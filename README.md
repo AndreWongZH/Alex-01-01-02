@@ -3,14 +3,14 @@
 ## TLS
 
 ### Running server
-go to ./TLS_server
+go to ./PI/TLS_server
 command to start server :
 ```
 ./tls-alex-server
 ```
 
 ### Compiling server files
-go to ./TLS_server
+go to ./PI/TLS_server
 run this command to compile:
 ```
 g++ tls-alex-server.cpp tls_server_lib.cpp tls_pthread.cpp make_tls_server.cpp tls_common_lib.cpp serial.cpp serialize.cpp -pthread -lssl -lcrypto -o tls-alex-server
@@ -18,14 +18,14 @@ g++ tls-alex-server.cpp tls_server_lib.cpp tls_pthread.cpp make_tls_server.cpp t
 ```
 
 ### Running client
-go to ./TLS_client
+go to ./Laptop/TLS_client
 command to start client :
 ```
 ./tls-alex-client
 ```
 
 ### Compiling client files
-go to ./TLS_client
+go to ./Laptop/TLS_client
 run this command to compile:
 ```
 g++ tls-alex-client.cpp make_tls_client.cpp tls_client_lib.cpp tls_pthread.cpp tls_common_lib.cpp -pthread -lssl -lcrypto -o tls-alex-client

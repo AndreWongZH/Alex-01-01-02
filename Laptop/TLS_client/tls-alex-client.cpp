@@ -162,13 +162,13 @@ void getFixedParams(int32_t* params, char ch) {
 	switch (ch) {
 		case 'w':
 		case 's':
-			params[0] = 15;
-			params[1] = 100;
+			params[0] = 10;
+			params[1] = 75;
 			break;
 		case 'a':
 		case 'd':
 			params[0] = 15;
-			params[1] = 100;
+			params[1] = 75;
 			break;
 		case 'h':
 		case 'k':
