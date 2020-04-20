@@ -40,14 +40,15 @@ steps to start the lidar
 1. start roscore on Raspberry Pi
 2. run command on Raspberry Pi
    ```
-   source devel/setup.bash
+   source PI/PI_slam/devel/setup.bash
    roslaunch rplidar_ros rplidar.launch
    ```
 3. run command on own laptop
    ```
-   source devel/setup.bash
+   source Laptop/Laptop_slam/devel/setup.bash
    roslaunch rplidar_ros view_hectorSlam.launch
    ```
+    **Changes were made to files inside the Laptop/Laptop_slam/src/rplidar_ros/launch folder
 
 ### Configure ROS master and slave
 
